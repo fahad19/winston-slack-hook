@@ -68,6 +68,9 @@ var logger = new Logger({
       formatter: function (options) {
         var message = options.message; // original message
 
+        // var level = options.level;
+        // var meta = options.meta;
+
         // do something with the message
 
         return message;
@@ -76,3 +79,7 @@ var logger = new Logger({
   ]
 });
 ```
+
+## License
+
+MIT © [Fahad Ibnay Heylaal](http://fahad19.com)
