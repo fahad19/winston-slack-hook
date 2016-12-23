@@ -51,7 +51,7 @@ Optional:
 * `iconEmoji`: Give the username an emoji as an avatar
 * `prependLevel`: set to `true` by default, sets `[level]` at the beginning of the message
 * `appendMeta`: set to `true` by default, sets stringified `meta` at the end of the message
-$ `formatter(options)`: function for transforming the message before posting to Slack
+* `formatter(options)`: function for transforming the message before posting to Slack
 
 ### Formatter
 
