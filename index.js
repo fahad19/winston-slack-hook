@@ -4,7 +4,7 @@ var request = require('request');
 var winston = require('winston');
 
 var SlackHook = winston.transports.SlackHook = function (options) {
-  this.name = 'slackHook';
+  this.name = options.name || 'slackHook';
   this.level = options.level || 'info';
 
   this.username = options.username || 'bot';
@@ -12,8 +12,8 @@ var SlackHook = winston.transports.SlackHook = function (options) {
   this.channel = options.channel || '#logs';
   this.iconEmoji = options.iconEmoji || null;
 
-  this.prependLevel = options.prependLevel || true;
-  this.appendMeta = options.appendMeta || true;
+  this.prependLevel = options.prependLevel === undefined ? true : options.prependLevel;
+  this.appendMeta = options.appendMeta === undefined ? true : options.appendMeta;
 
   this.formatter = options.formatter || null;
 };
@@ -23,14 +23,14 @@ util.inherits(SlackHook, winston.Transport);
 SlackHook.prototype.log = function (level, msg, meta, callback) {
   var message = '';
 
-  if (this.prependLevel === true) {
+  if (this.prependLevel) {
     message += '[' + level + '] ';
   }
 
   message += msg;
 
   if (
-    this.appendMeta === true &&
+    this.appendMeta &&
     meta &&
     Object.getOwnPropertyNames(meta).length
   ) {
