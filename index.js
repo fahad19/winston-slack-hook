@@ -34,7 +34,8 @@ SlackHook.prototype.log = function (level, msg, meta, callback) {
     meta &&
     Object.getOwnPropertyNames(meta).length
   ) {
-    message += ' ```' + JSON.stringify(meta, null, 2) + '```';
+    // http://stackoverflow.com/questions/18391212/is-it-not-possible-to-stringify-an-error-using-json-stringify#comment57014279_26199752
+    message += ' ```' + JSON.stringify(meta, Object.getOwnPropertyNames(meta), 2) + '```';
   }
 
   if (typeof this.formatter === 'function') {
