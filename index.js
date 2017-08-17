@@ -16,6 +16,7 @@ var SlackHook = winston.transports.SlackHook = function (options) {
   this.appendMeta = options.appendMeta === undefined ? true : options.appendMeta;
 
   this.formatter = options.formatter || null;
+  this.colors = options.colors || {};
 };
 
 util.inherits(SlackHook, winston.Transport);
@@ -23,7 +24,7 @@ util.inherits(SlackHook, winston.Transport);
 SlackHook.prototype.log = function (level, msg, meta, callback) {
   var message = '';
 
-  if (this.prependLevel) {
+  if (this.prependLevel && !this.colors[level]) {
     message += '[' + level + '] ';
   }
 
@@ -34,7 +35,8 @@ SlackHook.prototype.log = function (level, msg, meta, callback) {
     meta &&
     Object.getOwnPropertyNames(meta).length
   ) {
-    message += ' ```' + JSON.stringify(meta, null, 2) + '```';
+    // http://stackoverflow.com/questions/18391212/is-it-not-possible-to-stringify-an-error-using-json-stringify#comment57014279_26199752
+    message += ' ```' + JSON.stringify(meta, Object.getOwnPropertyNames(meta), 2) + '```';
   }
 
   if (typeof this.formatter === 'function') {
@@ -50,6 +52,14 @@ SlackHook.prototype.log = function (level, msg, meta, callback) {
     username: this.username,
     text: message
   };
+
+  if (this.colors[level]) {
+    payload.text = this.prependLevel ? level : null;
+    payload.attachments = [{
+      text: message,
+      color: this.colors[level]
+    }];
+  }
 
   if (this.iconEmoji) {
     payload.icon_emoji = this.iconEmoji; // jshint ignore:line

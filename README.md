@@ -52,10 +52,11 @@ Optional:
 * `prependLevel`: set to `true` by default, sets `[level]` at the beginning of the message
 * `appendMeta`: set to `true` by default, sets stringified `meta` at the end of the message
 * `formatter(options)`: function for transforming the message before posting to Slack
+* `colors`: set to `{}` by default (no colors), set the color of the message given a level.
 
-### Formatter
+### Formatter and colors
 
-Messages can be formatted formatted further before posting to Slack:
+Messages can be formatted further before posting to Slack:
 
 ```js
 var logger = new Logger({
@@ -74,6 +75,12 @@ var logger = new Logger({
         // do something with the message
 
         return message;
+      },
+      colors: {
+        warn: 'warning',
+        error: 'danger',
+        info: 'good',
+        debug: '#bbddff'
       }
     })
   ]
