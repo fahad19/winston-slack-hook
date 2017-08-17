@@ -16,6 +16,7 @@ var SlackHook = winston.transports.SlackHook = function (options) {
   this.appendMeta = options.appendMeta === undefined ? true : options.appendMeta;
 
   this.formatter = options.formatter || null;
+  this.colors = options.colors || {};
 };
 
 util.inherits(SlackHook, winston.Transport);
@@ -23,7 +24,7 @@ util.inherits(SlackHook, winston.Transport);
 SlackHook.prototype.log = function (level, msg, meta, callback) {
   var message = '';
 
-  if (this.prependLevel) {
+  if (this.prependLevel && !this.colors[level]) {
     message += '[' + level + '] ';
   }
 
@@ -51,6 +52,14 @@ SlackHook.prototype.log = function (level, msg, meta, callback) {
     username: this.username,
     text: message
   };
+
+  if (this.colors[level]) {
+    payload.text = this.prependLevel ? level : null;
+    payload.attachments = [{
+      text: message,
+      color: this.colors[level]
+    }];
+  }
 
   if (this.iconEmoji) {
     payload.icon_emoji = this.iconEmoji; // jshint ignore:line
