@@ -57,7 +57,8 @@ SlackHook.prototype.log = function (level, msg, meta, callback) {
     payload.text = this.prependLevel ? level : null;
     payload.attachments = [{
       text: message,
-      color: this.colors[level]
+      color: this.colors[level],
+      mrkdwn_in: ['text', 'pretext']
     }];
   }
 
